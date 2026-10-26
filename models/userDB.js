@@ -58,18 +58,5 @@ function addUser(user, callback) {
 
 module.exports = { getUsers, addUser };
 
-function getUsers(callback) {
-  setTimeout(function () {
-    callback(users);
-  }, 1000);
-}
 
-function addUser(user, callback) {
-  setTimeout(function () {
-    user.id = users.length + 1;
-    users.push(user);
-    callback(user);
-  }, 500);
-}
 
-module.exports = { getUsers, addUser };
