@@ -1,14 +1,62 @@
-// Simulated database
-const users = [
-  { "id": 1, "fname": "Jim", "lname": "Smith", "username": "jsmith" },
-  { "id": 2, "fname": "Jack", "lname": "Kennedy", "username": "jkennedy" },
-  { "id": 3, "fname": "Linda", "lname": "Nelson", "username": "lnelson" },
-  { "id": 4, "fname": "Kayli", "lname": "Williams", "username": "kwilliams" },
-  { "id": 5, "fname": "Seth", "lname": "Walters", "username": "swalters" },
-  { "id": 6, "fname": "Brandon", "lname": "Jones", "username": "bjones" },
-  { "id": 7, "fname": "Ally", "lname": "Smith", "username": "asmith" },
-  { "id": 8, "fname": "Jordan", "lname": "Wilson", "username": "jwilson" }
-];
+
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'assignDBuser',
+    password: 'assignDBpass',
+    database: 'assignDB'
+});
+
+connection.connect(function (err) {
+    if (err) {
+        console.error(err);
+        return;
+    }
+
+    console.log('Connected to MySQL');
+});
+
+function getUsers(callback) {
+
+    connection.query(
+        'SELECT * FROM users',
+        function (err, results) {
+
+            if (err) {
+                console.error(err);
+                callback([]);
+                return;
+            }
+
+            callback(results);
+        }
+    );
+}
+
+function addUser(user, callback) {
+
+    const sql =
+        'INSERT INTO users (fname, lname, username, passwd) VALUES (?, ?, ?, ?)';
+
+    connection.query(
+        sql,
+        [user.fname, user.lname, user.username, user.passwd],
+        function (err, results) {
+
+            if (err) {
+                console.error(err);
+                callback(null);
+                return;
+            }
+
+            user.userID = results.insertId;
+            callback(user);
+        }
+    );
+}
+
+module.exports = { getUsers, addUser };
 
 function getUsers(callback) {
   setTimeout(function () {
