@@ -17,11 +17,26 @@ app.get("/", function (req, res) {
     });
 });
 
+app.get("/addUser", function(req, res) {
+
+    res.render("addUser");
+
+});
+
 app.post("/users", function (req, res) {
     userDB.addUser(req.body, function (data) {
         console.log(data);
         res.redirect("/");
     });
+});
+
+app.post("/users/:id/delete", function(req, res) {
+
+    userDB.deleteUser(req.params.id, function() {
+
+        res.redirect("/");
+    });
+
 });
 
 

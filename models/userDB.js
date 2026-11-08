@@ -56,7 +56,28 @@ function addUser(user, callback) {
     );
 }
 
-module.exports = { getUsers, addUser };
+function deleteUser(userID, callback) {
+
+    const sql = 'DELETE FROM users WHERE userID = ?';
+
+    connection.query(
+        sql,
+        [userID],
+        function (err, results) {
+
+            if (err) {
+                console.error(err);
+                callback(false);
+                return;
+            }
+
+            callback(true);
+        }
+    );
+}
+
+
+module.exports = { getUsers, addUser, deleteUser };
 
 
 
